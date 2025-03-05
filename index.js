@@ -36,7 +36,13 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
-
+    app.get("/watchLists/:email", async (req, res) => {
+      const email = req.params.email;
+      console.log(email);
+      const query = { user_email: email };
+      const result = await watchListCollection.find(query).toArray();
+      res.send(result);
+    });
     app.post("/watchLists", async (req, res) => {
       const watchList = req.body;
       // console.log(watchList);
@@ -47,6 +53,13 @@ async function run() {
     app.get("/reviews", async (req, res) => {
       const cursor = reviewCollection.find();
       const result = await cursor.toArray();
+      res.send(result);
+    });
+    app.get("/reviews/:email", async (req, res) => {
+      const email = req.params.email;
+      console.log(email);
+      const query = { email: email };
+      const result = await reviewCollection.find(query).toArray();
       res.send(result);
     });
     app.get("/reviews/:id", async (req, res) => {
@@ -63,6 +76,7 @@ async function run() {
       const result = await reviewCollection.insertOne(newReview);
       res.send(result);
     });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
